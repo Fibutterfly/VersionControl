@@ -29,6 +29,17 @@ namespace UserMaintenance
 
             button2.Text = Resource1.savefeil;
             button2.Click += Button2_Click;
+
+            button3.Text = Resource1.del;
+            button3.Click += Button3_Click;
+        }
+
+        private void Button3_Click(object sender, EventArgs e)
+        {
+            if (listBox1.SelectedIndex > -1)
+            {
+                users.RemoveAt(listBox1.SelectedIndex);
+            }
         }
 
         private void Button2_Click(object sender, EventArgs e)
