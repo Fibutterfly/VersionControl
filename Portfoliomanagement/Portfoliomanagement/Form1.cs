@@ -15,10 +15,21 @@ namespace Portfoliomanagement
     {
         List<Tick> Ticks;
         PortfolioEntities context = new PortfolioEntities();
+        List<PortfolioItem> Portfolio = new List<PortfolioItem>();
         public Form1()
         {
             InitializeComponent();
             loadData();
+            CreatePortfilio();
+            
+        }
+        private void CreatePortfilio()
+        {
+            Portfolio.Add(new PortfolioItem() { Index = "OTP", Volume = 10 });
+            Portfolio.Add(new PortfolioItem() { Index = "ZWACK", Volume = 10 });
+            Portfolio.Add(new PortfolioItem() { Index = "ELMU", Volume = 10 });
+
+            dataGridView2.DataSource = Portfolio;
         }
         private void loadData()
         {
