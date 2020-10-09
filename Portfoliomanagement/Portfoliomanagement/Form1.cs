@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Data.Entity;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,16 +17,45 @@ namespace Portfoliomanagement
         List<Tick> Ticks;
         PortfolioEntities context = new PortfolioEntities();
         List<PortfolioItem> Portfolio = new List<PortfolioItem>();
+        List<decimal> Nyereségek;
         public Form1()
         {
             InitializeComponent();
+            button1.Click += Button1_Click;
             loadData();
             CreatePortfilio();
             VaRCalc();
         }
+        private void SaveToText()
+        {
+            using (SaveFileDialog sfd = new SaveFileDialog())
+            {
+                if (sfd.ShowDialog() != DialogResult.OK)
+                {
+                    return;
+                }
+                using (StreamWriter sw = new StreamWriter(sfd.FileName))
+                {
+                    sw.WriteLine("Időszak;Nyereség");
+                    int intervalum = 30;
+                    DateTime kezdőDátum = (from x in Ticks select x.TradingDay).Min();
+                    DateTime záróDátum = (from x in Ticks select x.TradingDay).Max();
+                    TimeSpan z = záróDátum - kezdőDátum;
+                    for (int i = 0; i < z.Days - intervalum; i++)
+                    {
+                        sw.WriteLine($"{kezdőDátum.AddDays(i + intervalum)} - {kezdőDátum.AddDays(i)};{Nyereségek[i]}");
+                    }
+                }
+            }
+        }
+        private void Button1_Click(object sender, EventArgs e)
+        {
+            SaveToText();
+        }
+
         private void VaRCalc()
         {
-            List<decimal> Nyereségek = new List<decimal>();
+            Nyereségek = new List<decimal>();
             int intervalum = 30;
             DateTime kezdőDátum = (from x in Ticks select x.TradingDay).Min();
             DateTime záróDátum = new DateTime(2016, 12, 30);
