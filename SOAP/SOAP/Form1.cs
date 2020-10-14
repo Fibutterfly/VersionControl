@@ -10,6 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Windows.Forms.DataVisualization.Charting;
 using System.Xml;
 
 namespace SOAP
@@ -25,7 +26,24 @@ namespace SOAP
             LoadWebService();
             dataGridView1.DataSource = Rates;
             ProcessXML();
+            MakeDiagramm();
+        }
+        private void MakeDiagramm()
+        {
+            chartRateData.DataSource = Rates;
+            Series series = chartRateData.Series[0];
+            series.ChartType = SeriesChartType.Line;
+            series.XValueMember = "Date";
+            series.YValueMembers = "Value";
+            series.BorderWidth = 2;
 
+            Legend legend = chartRateData.Legends[0];
+            legend.Enabled = false;
+
+            ChartArea chartArea = chartRateData.ChartAreas[0];
+            chartArea.AxisX.MajorGrid.Enabled = false;
+            chartArea.AxisY.MajorGrid.Enabled = false;
+            chartArea.AxisY.IsStartedFromZero = false;
         }
         private void ProcessXML()
         {
