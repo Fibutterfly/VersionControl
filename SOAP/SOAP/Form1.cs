@@ -14,10 +14,12 @@ namespace SOAP
 {
     public partial class Form1 : Form
     {
+        BindingList<Entities.RateData> Rates = new BindingList<Entities.RateData>();
         public Form1()
         {
             InitializeComponent();
             LoadWebService();
+            dataGridView1.DataSource = Rates;
         }
         private void LoadWebService()
         {
