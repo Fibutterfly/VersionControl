@@ -19,11 +19,68 @@ namespace SOAP
     {
         BindingList<Entities.RateData> Rates = new BindingList<Entities.RateData>();
         string result;
-
+        DateTime StartDate = new DateTime(year: 2020, month: 01, day: 01);
+        DateTime EndDate = new DateTime(year: 2020, month: 06, day: 30);
+        string currency = "EUR";
         public Form1()
         {
             InitializeComponent();
-            LoadWebService();
+            dateTimePicker1.Value = StartDate;
+            dateTimePicker2.Value = EndDate;
+            dateTimePicker1.ValueChanged += DateTimePicker1_ValueChanged;
+            dateTimePicker2.ValueChanged += DateTimePicker2_ValueChanged;
+            FillCombo();
+            RefreshData();
+
+            comboBox1.Click += ComboBox1_Click;
+            comboBox1.SelectedIndexChanged += ComboBox1_SelectedIndexChanged;
+        }
+
+        private void DateTimePicker2_ValueChanged(object sender, EventArgs e)
+        {
+            RefreshData();
+        }
+
+        private void DateTimePicker1_ValueChanged(object sender, EventArgs e)
+        {
+            RefreshData();
+        }
+
+        private void ComboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            RefreshData();
+        }
+
+        private void ComboBox1_Click(object sender, EventArgs e)
+        {
+            RefreshData();
+        }
+
+        private void FillCombo()
+        {
+            var mnbService = new MNBArfolyamServiceSoapClient();
+            var request = new GetCurrenciesRequestBody();
+            var response = mnbService.GetCurrencies(request);
+            var xml = new XmlDocument();
+            xml.LoadXml(response.GetCurrenciesResult);
+            BindingList<string> curr = new BindingList<string>();
+            foreach (XmlElement item in xml.GetElementsByTagName("Currencies"))
+            {
+                foreach (XmlElement childElement in item.ChildNodes)
+                {
+                    //Console.WriteLine(childElement.InnerText);
+                    curr.Add(childElement.InnerText);
+                }
+               
+            }
+            comboBox1.DataSource = curr;
+            comboBox1.SelectedItem = currency;
+
+        }
+        private void RefreshData()
+        {
+            Rates.Clear();
+            LoadWebService(comboBox1.SelectedItem.ToString() ,startDate: dateTimePicker1.Value, endDate:dateTimePicker2.Value);
             dataGridView1.DataSource = Rates;
             ProcessXML();
             MakeDiagramm();
@@ -52,6 +109,10 @@ namespace SOAP
             foreach (XmlElement element in xml.DocumentElement)
             {
                 var childElement = (XmlElement)element.ChildNodes[0];
+                if (childElement == null)
+                {
+                    continue;
+                }
                 var unit = decimal.Parse(childElement.GetAttribute("unit"));
                 var value = decimal.Parse(childElement.InnerText);
                 var rate = new RateData()
@@ -63,14 +124,22 @@ namespace SOAP
                 Rates.Add(rate);
             }
         }
-        private void LoadWebService()
+        private void LoadWebService(string currency = "EUR",DateTime? startDate = null, DateTime? endDate = null)
         {
+            if (startDate == null)
+            {
+                startDate = StartDate;
+            }
+            if (endDate == null)
+            {
+                endDate = EndDate;
+            }
             var mnbService = new MNBArfolyamServiceSoapClient();
             var request = new GetExchangeRatesRequestBody()
             {
-                currencyNames = "EUR",
-                startDate = "2020-01-01",
-                endDate = "2020-06-30"
+                currencyNames = currency,
+                startDate = startDate.ToString(),
+                endDate = endDate.ToString()
 
             };
             var response = mnbService.GetExchangeRates(request);
