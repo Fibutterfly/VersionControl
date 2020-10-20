@@ -20,14 +20,42 @@ namespace Szimulacio
         List<BirthProbability> BirthProbabilities = new List<BirthProbability>();
         List<DeathProbability> DeathProbabilities = new List<DeathProbability>();
         Random rnd = new Random(1024);
+        string PopLocation = @"C:\Temp\nép-teszt.csv";
         public Form1()
         {
             InitializeComponent();
-            Population = GetPopulation(@"C:\Temp\nép-teszt.csv");
             BirthProbabilities = GetBirthProbabilities(@"C:\Temp\Születés.csv");
             DeathProbabilities = GetDeathProbabilities(@"C:\Temp\halál.csv");
+            button2.Click += Button2_Click;
+            button1.Click += Button1_Click;
+            numericUpDown1.Minimum = 1950;
+            numericUpDown1.Maximum = 2500;
+            numericUpDown1.Value = 2024;
+            RefreshFile();
+        }
+        private void RefreshFile()
+        {
+            textBox1.Text = PopLocation;
+        }
+        private void Button1_Click(object sender, EventArgs e)
+        {
+            using (OpenFileDialog ofd = new OpenFileDialog())
+            {
+                if (ofd.ShowDialog() == DialogResult.OK)
+                {
+                    PopLocation = ofd.FileName;
+                    RefreshFile();
+                }
+            }
+        }
+
+        private void Button2_Click(object sender, EventArgs e)
+        {
+            listBox1.Items.Clear();
+            Population = GetPopulation(textBox1.Text);
             Szimu();
         }
+
         public void SimStep(int year, Person person)
         {
             if (!person.IsAlive)
@@ -61,7 +89,7 @@ namespace Szimulacio
         }
         public void Szimu()
         {
-            for (int year = 2005; year < 2024; year++)
+            for (int year = 2005; year <= numericUpDown1.Value; year++)
             {
                 for (int i = 0; i < Population.Count; i++)
                 {
@@ -74,6 +102,10 @@ namespace Szimulacio
                                     where x.Gender == Gender.Female && x.IsAlive
                                     select x).Count();
                 Console.WriteLine($"Év:{year} Fiúk:{nbrOfMales} Lányok:{nbrOfFemales}");
+                listBox1.Items.Add($"Szimulációs év: {year}");
+                listBox1.Items.Add($"\t Fiúk: {nbrOfMales}");
+                listBox1.Items.Add($"\t Lányok: {nbrOfFemales}");
+                listBox1.Items.Add("");
             }
         }
         public List<Person> GetPopulation(string csv)
