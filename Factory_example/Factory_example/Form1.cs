@@ -37,7 +37,7 @@ namespace Factory_example
             int maxPosition = 0;
             foreach (var ball in _balls)
             {
-                ball.MoveBall();
+                ball.MoveToy();
                 maxPosition = ball.Left;
             }
             if (maxPosition > 100)
