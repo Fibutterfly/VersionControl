@@ -49,6 +49,7 @@
     <Compile Include="Abstraction\Car.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Abstraction\IToyFactory.cs" />
     <Compile Include="Abstraction\Toy.cs">
       <SubType>Component</SubType>
     </Compile>
