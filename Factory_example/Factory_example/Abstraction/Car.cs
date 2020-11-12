@@ -12,7 +12,7 @@ namespace Factory_example.Abstraction
     {
         protected override void DrawImage(Graphics input)
         {
-            Image imageFile = Image.FromFile("Images/car.png");
+            Image imageFile = Image.FromFile("Iamges/car.png");
             input.DrawImage(imageFile, new Rectangle(0,0,Width,Height));
         }
     }

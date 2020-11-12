@@ -14,9 +14,9 @@ namespace Factory_example
     public partial class Form1 : Form
     {
         List<Toy> _toys = new List<Toy>();
-        private BallFactory _factory;
+        private CarFactory _factory;
 
-        public BallFactory Factory
+        public CarFactory Factory
         {
             get { return _factory; }
             set { _factory = value; }
@@ -25,7 +25,7 @@ namespace Factory_example
         public Form1()
         {
             InitializeComponent();
-            Factory = new BallFactory();
+            Factory = new CarFactory();
             createTimer.Tick += CreateTimer_Tick;
             createTimer.Start();
             conveyorTimer.Tick += ConveyorTimer_Tick;
