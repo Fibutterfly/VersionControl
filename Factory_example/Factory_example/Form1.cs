@@ -55,7 +55,10 @@ namespace Factory_example
 
         private void Button2_Click(object sender, EventArgs e)
         {
-            Factory = new BallFactory();
+            Factory = new BallFactory()
+            {
+                BallColor = button4.BackColor
+            };
         }
 
         private void Button1_Click(object sender, EventArgs e)
