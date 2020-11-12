@@ -39,6 +39,18 @@ namespace Factory_example
             button1.Click += Button1_Click;
             button2.Click += Button2_Click;
             button4.Click += Button4_Click;
+            button5.Click += Button4_Click;
+            button6.Click += Button4_Click;
+            button3.Click += Button3_Click;
+        }
+
+        private void Button3_Click(object sender, EventArgs e)
+        {
+            Factory = new PresentFactory()
+            {
+                Box = button5.BackColor,
+                Ribbon = button6.BackColor
+            };
         }
 
         private void Button4_Click(object sender, EventArgs e)
