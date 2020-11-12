@@ -8,7 +8,7 @@ using System.Windows.Forms;
 
 namespace Factory_example.Entites
 {
-    class Ball : Label
+    public class Ball : Label
     {
         public Ball()
         {
@@ -20,13 +20,13 @@ namespace Factory_example.Entites
 
         private void Ball_Paint(object sender, PaintEventArgs e)
         {
-            throw new NotImplementedException();
+            DrawImage(e.Graphics);
         }
         protected void DrawImage(Graphics input)
         {
             input.FillEllipse(new SolidBrush(Color.Blue), 0, 0, Width, Height);
         }
-        private void MoveBall()
+        public void MoveBall()
         {
             Left += 1;
         }
