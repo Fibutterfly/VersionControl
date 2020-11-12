@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Factory_example.Abstraction;
 using Factory_example.Entites;
 
 namespace Factory_example
@@ -14,12 +15,17 @@ namespace Factory_example
     public partial class Form1 : Form
     {
         List<Toy> _toys = new List<Toy>();
-        private CarFactory _factory;
+        private Toy _nextToy;
+        private IToyFactory _factory;
 
-        public CarFactory Factory
+        public IToyFactory Factory
         {
             get { return _factory; }
-            set { _factory = value; }
+            set 
+            { 
+                _factory = value;
+                DisplayNeXt();
+            }
         }
 
         public Form1()
@@ -30,8 +36,30 @@ namespace Factory_example
             createTimer.Start();
             conveyorTimer.Tick += ConveyorTimer_Tick;
             conveyorTimer.Start();
+            button1.Click += Button1_Click;
+            button2.Click += Button2_Click;
         }
 
+        private void Button2_Click(object sender, EventArgs e)
+        {
+            Factory = new BallFactory();
+        }
+
+        private void Button1_Click(object sender, EventArgs e)
+        {
+            Factory = new CarFactory();
+        }
+        private void DisplayNeXt()
+        {
+            if(_nextToy != null)
+            {
+                Controls.Remove(_nextToy);
+            }
+            _nextToy = Factory.CreateNew();
+            _nextToy.Top = label1.Top + label1.Height + 20;
+            _nextToy.Left = label1.Left;
+            Controls.Add(_nextToy);
+        }
         private void ConveyorTimer_Tick(object sender, EventArgs e)
         {
             int maxPosition = 0;
@@ -40,7 +68,7 @@ namespace Factory_example
                 ball.MoveToy();
                 maxPosition = ball.Left;
             }
-            if (maxPosition > 100)
+            if (maxPosition > 1000)
             {
                 var oldestBall = _toys[0];
                 mainPanel.Controls.Remove(oldestBall);

@@ -7,7 +7,7 @@ using Factory_example.Entites;
 
 namespace Factory_example.Abstraction
 {
-    interface IToyFactory
+    public interface IToyFactory
 
     { 
         Toy CreateNew();
