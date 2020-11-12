@@ -13,7 +13,7 @@ namespace Factory_example
 {
     public partial class Form1 : Form
     {
-        List<Ball> _balls = new List<Ball>();
+        List<Toy> _toys = new List<Toy>();
         private BallFactory _factory;
 
         public BallFactory Factory
@@ -35,23 +35,23 @@ namespace Factory_example
         private void ConveyorTimer_Tick(object sender, EventArgs e)
         {
             int maxPosition = 0;
-            foreach (var ball in _balls)
+            foreach (var ball in _toys)
             {
                 ball.MoveToy();
                 maxPosition = ball.Left;
             }
             if (maxPosition > 100)
             {
-                var oldestBall = _balls[0];
+                var oldestBall = _toys[0];
                 mainPanel.Controls.Remove(oldestBall);
-                _balls.Remove(oldestBall);
+                _toys.Remove(oldestBall);
             }
         }
 
         private void CreateTimer_Tick(object sender, EventArgs e)
         {
-            Ball ball = Factory.CreateNew();
-            _balls.Add(ball);
+            var ball = Factory.CreateNew();
+            _toys.Add(ball);
             ball.Left = -ball.Width;
             mainPanel.Controls.Add(ball);
         }
