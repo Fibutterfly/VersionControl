@@ -38,6 +38,19 @@ namespace Factory_example
             conveyorTimer.Start();
             button1.Click += Button1_Click;
             button2.Click += Button2_Click;
+            button4.Click += Button4_Click;
+        }
+
+        private void Button4_Click(object sender, EventArgs e)
+        {
+            var input = (Button)sender;
+            var cd = new ColorDialog();
+            cd.Color = input.BackColor;
+            if (cd.ShowDialog() != DialogResult.OK)
+            {
+                return;
+            }
+            input.BackColor = cd.Color;
         }
 
         private void Button2_Click(object sender, EventArgs e)
