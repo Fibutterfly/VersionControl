@@ -5,6 +5,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnitTestExample.Controllers;
+using System.Activities;
+using UnitTestExample.Abstractions;
+using UnitTestExample.Entities;
+using UnitTestExample.Services;
 
 namespace UnitTestExample.Test
 {
@@ -44,7 +48,6 @@ namespace UnitTestExample.Test
         [
             Test,
             TestCase("irf@uni-corvinus.hu", "Abcd1234"),
-            TestCase("irf@uni-corvinus.hu", "Abcd1234567"),
             TestCase("illes@filep.hu", "sZuPeRjeLsZo123"),
             TestCase("ez@cim.hu","123JoNaKkEnElEnNiE"),
         ]
@@ -54,6 +57,27 @@ namespace UnitTestExample.Test
             Assert.That(email, Is.EqualTo(actualResult.Email));
             Assert.That(password, Is.EqualTo(actualResult.Password));
             Assert.That(Guid.Empty, Is.Not.EqualTo(actualResult.ID));
+        }
+        [
+            Test,
+            TestCase("irf@uni-corvinus", "Abcd1234"),
+            TestCase("irf.uni-corvinus.hu", "Abcd1234"),
+            TestCase("irf@uni-corvinus.hu", "abcd1234"),
+            TestCase("irf@uni-corvinus.hu", "ABCD1234"),
+            TestCase("irf@uni-corvinus.hu", "abcdABCD"),
+            TestCase("irf@uni-corvinus.hu", "Ab1234"),
+         ]
+        public void TestRegisterValidateException(string email, string password)
+        {
+            try
+            {
+                var actualResult = accountController.Register(email,password);
+                Assert.Fail();
+            }
+            catch (Exception ex)
+            {
+                Assert.That(ex, Is.TypeOf<ValidationException>());
+            }
         }
     }
 }
