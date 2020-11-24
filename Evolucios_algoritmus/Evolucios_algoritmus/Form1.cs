@@ -47,6 +47,7 @@ namespace Evolucios_algoritmus
 
         private void Gc_GameOver(object sender)
         {
+            MessageBox.Show("Test");
             generation++;
             label1.Text = $"{generation}. Generáció";
             var playerList = from p in gc.GetCurrentPlayers()
