@@ -33,6 +33,16 @@ namespace Evolucios_algoritmus
             }
             
             gc.Start(true);
+            button1.Click += Button1_Click;
+        }
+
+        private void Button1_Click(object sender, EventArgs e)
+        {
+            gc.ResetCurrentLevel();
+            gc.AddPlayer(winnerBrain.Clone());
+            gc.AddPlayer();
+            ga.Focus();
+            gc.Start(true);
         }
 
         private void Gc_GameOver(object sender)
